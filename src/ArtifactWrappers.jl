@@ -6,6 +6,12 @@ using DocStringExtensions: FIELDS
 
 export ArtifactWrapper, ArtifactFile, get_data_folder
 
+if VERSION >= v"1.6"
+    download_method = Downloads.download
+else
+    download_method = Artifacts.download
+end
+
 """
     ArtifactFile
 
