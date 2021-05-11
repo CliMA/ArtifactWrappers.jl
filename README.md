@@ -15,8 +15,8 @@ A lightweight wrapper around Julia Artifacts
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
 [docs-dev-url]: https://CliMA.github.io/ArtifactWrappers.jl/dev/
 
-[unit-tests-img]: https://github.com/CliMA/ArtifactWrappers.jl/workflows/OS%20Unit%20Tests/badge.svg
-[unit-tests-url]: https://github.com/CliMA/ArtifactWrappers.jl/actions?query=workflow%3A%22OS+Unit+Tests%22
+[unit-tests-img]: https://github.com/CliMA/ArtifactWrappers.jl/actions/workflows/ci.yml/badge.svg
+[unit-tests-url]: https://github.com/CliMA/ArtifactWrappers.jl/actions/workflows/ci.yml
 
 [codecov-img]: https://codecov.io/gh/CliMA/ArtifactWrappers.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/CliMA/ArtifactWrappers.jl
