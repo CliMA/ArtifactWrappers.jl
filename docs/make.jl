@@ -13,9 +13,7 @@ makedocs(
     clean = true,
     doctest = true,
     modules = [ArtifactWrappers],
-    pages = Any[
-        "Home" => "index.md",
-    ],
+    pages = Any["Home" => "index.md",],
 )
 
 deploydocs(
