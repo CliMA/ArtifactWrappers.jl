@@ -2,7 +2,6 @@ module ArtifactWrappers
 
 using Downloads
 using Pkg.Artifacts
-using DocStringExtensions: FIELDS
 
 export ArtifactWrapper, ArtifactFile, get_data_folder
 
@@ -19,7 +18,8 @@ A single data file to be downloaded, containing both the url and the
 name to use locally.
 
 # Fields
-$(FIELDS)
+ - `url` URL pointing to data to be downloaded
+ - `filename` Local name used for downloaded online data
 """
 Base.@kwdef struct ArtifactFile
     "URL pointing to data to be downloaded"
@@ -52,7 +52,11 @@ dataset = ArtifactWrapper(
 ```
 
 # Fields
-$(FIELDS)
+ - `artifact_dir` Directory to store artifact / data
+ - `local_run` Locally running (not using CI)
+ - `artifact_toml` Path to the used Artifacts.toml
+ - `data_name` Unique name of dataset
+ - `artifact_files` Array of `ArtifactFile`'s, grouped by this dataset
 """
 struct ArtifactWrapper
     "Directory to store artifact / data"
@@ -88,7 +92,7 @@ Get local folder of dataset defined in `art_wrap`.
 
 Example:
 
-```
+```julia
 dataset_path = get_data_folder(dataset)
 ```
 """
