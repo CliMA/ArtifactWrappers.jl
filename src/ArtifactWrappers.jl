@@ -53,7 +53,7 @@ dataset = ArtifactWrapper(
 
 # Fields
  - `artifact_dir` Directory to store artifact / data
- - `local_run` Locally running (not using CI)
+ - `lazy_download` Lazily download data. Set to false to eagerly download data.
  - `artifact_toml` Path to the used Artifacts.toml
  - `data_name` Unique name of dataset
  - `artifact_files` Array of `ArtifactFile`'s, grouped by this dataset
@@ -61,8 +61,8 @@ dataset = ArtifactWrapper(
 struct ArtifactWrapper
     "Directory to store artifact / data"
     artifact_dir::AbstractString
-    "Locally running (not using CI)"
-    local_run::Bool
+    "Lazily download data. Set to false to eagerly download data."
+    lazy_download::Bool
     "Path to the used Artifacts.toml"
     artifact_toml::AbstractString
     "Unique name of dataset"
@@ -70,14 +70,16 @@ struct ArtifactWrapper
     "Array of `ArtifactFile`'s, grouped by this dataset"
     artifact_files::Vector{ArtifactFile}
 end
-function ArtifactWrapper(artifact_dir, local_run, data_name, artifact_files)
-    if !local_run
-        artifact_dir = mktempdir(artifact_dir; prefix = "artifact_")
-    end
+function ArtifactWrapper(
+    artifact_dir,
+    data_name,
+    artifact_files;
+    lazy_download = true,
+)
     artifact_toml = joinpath(artifact_dir, "Artifacts.toml")
     return ArtifactWrapper(
         artifact_dir,
-        local_run,
+        lazy_download,
         artifact_toml,
         data_name,
         artifact_files,
@@ -97,7 +99,7 @@ dataset_path = get_data_folder(dataset)
 ```
 """
 function get_data_folder(art_wrap::ArtifactWrapper)
-    if !art_wrap.local_run
+    if !art_wrap.lazy_download
         # When running multiple jobs, create_artifact
         # has a race condition when creating/moving
         # files. So, when using CI, just download

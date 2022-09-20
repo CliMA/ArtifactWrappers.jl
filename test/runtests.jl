@@ -19,15 +19,22 @@ end
         af = ArtifactFile(url = "file://$tempfile", filename = "foo")
 
         # Caches artifact:
-        aw = ArtifactWrapper(path, true, "test_art_wrap", ArtifactFile[af])
+        aw = ArtifactWrapper(
+            path,
+            "test_art_wrap",
+            ArtifactFile[af];
+            lazy_download = true,
+        )
         f = get_data_folder(aw)
         @test isfile(joinpath(f, "foo"))
 
         # Download only:
-        aw = ArtifactWrapper(path, false, "test_art_wrap", ArtifactFile[af])
-
-        # Test that "artifact_" was prepended:
-        @test occursin("artifact_", aw.artifact_dir)
+        aw = ArtifactWrapper(
+            path,
+            "test_art_wrap",
+            ArtifactFile[af];
+            lazy_download = false,
+        )
 
         f = get_data_folder(aw)
         @test isfile(joinpath(f, "foo"))
