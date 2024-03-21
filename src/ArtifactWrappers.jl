@@ -1,7 +1,12 @@
 module ArtifactWrappers
 
+using ArtifactUtils
+using REPL.TerminalMenus
+
 using Downloads
 using Pkg.Artifacts
+
+export create_add_artifact_guided
 
 export ArtifactWrapper, ArtifactFile, get_data_folder
 
@@ -162,6 +167,73 @@ function get_data_folder(art_wrap::ArtifactWrapper)
         dataset_path = artifact_path(data_hash)
         return dataset_path
     end
+end
+
+
+"""
+    create_tarball(artifact_dir)
+
+Create a `tar.gz` from the given directory. Return the path.
+"""
+function create_tarball(artifact_dir; tar_path = artifact_dir * ".tar.gz")
+    artifact_id = ArtifactUtils.artifact_from_directory(artifact_dir)
+    ArtifactUtils.archive_artifact(artifact_id, tar_path)
+    return tar_path
+end
+
+"""
+    create_add_artifact_guided(artifact_dir,
+                               artifact_toml = joinpath(pwd(), "Artifact.toml"))
+
+Start a guided process to create an artifact from a directory of files.
+"""
+function create_add_artifact_guided(
+    artifact_dir;
+    artifact_toml = joinpath(pwd(), "Artifact.toml"),
+)
+    println("First, we will create the artifact tarball")
+    println(
+        "You will upload it to the Caltech Data Archive and provide the direct link",
+    )
+    println("Archiving artifact (might take a while)")
+    tar_path = create_tarball(artifact_dir)
+    println("Artifact archived!")
+
+    println(
+        "Now, upload $tar_path to the Caltech Data Archive, paste here the link, and press ENTER",
+    )
+    print("> ")
+    tarball_url = readline()
+
+    println(
+        "What's the name of your artifact? Write it here, and press ENTER (no spaces/special symbols)",
+    )
+    print("> ")
+    artifact_name = readline()
+
+    println(
+        "We will add the artifact to $artifact_toml. You can copy and edit the relevant configuration from there",
+    )
+    println(
+        "I will try to download your freshly minted artifact to check that it works (might take a while)",
+    )
+
+    # Bind the artifact, retrieve the Artifact.toml, and print it
+    mktempdir() do path
+        artifact_toml = joinpath(path, "Artifacts.toml")
+        ArtifactUtils.add_artifact!(artifact_toml, artifact_name, tarball_url)
+        open(artifact_toml, "r") do file
+            artifact_str = read(file, String)
+            println(
+                "Here is your artifact string. Copy and past it to your Artifacts.toml",
+            )
+            println()
+            println(artifact_str)
+        end
+    end
+
+    println()
+    println("Done! Enjoy the rest of your day!")
 end
 
 end # module

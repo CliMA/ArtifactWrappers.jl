@@ -1,11 +1,13 @@
 name = "ArtifactWrappers"
 uuid = "a14bc488-3040-4b00-9dc1-f6467924858a"
 authors = ["Climate Modeling Alliance"]
-version = "0.2.0"
+version = "0.3.0"
 
 [deps]
+ArtifactUtils = "8b73e784-e7d8-4ea5-973d-377fed4e3bce"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 
 [compat]
 Downloads = "1.4.0"
