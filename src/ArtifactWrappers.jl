@@ -76,6 +76,11 @@ function ArtifactWrapper(
     artifact_files;
     lazy_download = true,
 )
+    Base.depwarn(
+        "ArtifactWrapper is deprecated. Use ClimaArtifacts instead.",
+        :ArtifactWrapper,
+        force = true,
+    )
     artifact_toml = joinpath(artifact_dir, "Artifacts.toml")
     return ArtifactWrapper(
         artifact_dir,
@@ -99,6 +104,11 @@ dataset_path = get_data_folder(dataset)
 ```
 """
 function get_data_folder(art_wrap::ArtifactWrapper)
+    Base.depwarn(
+        "ArtifactWrapper is deprecated. Use ClimaArtifacts instead.",
+        :get_data_folder,
+        force = true,
+    )
     if !art_wrap.lazy_download
         # When running multiple jobs, create_artifact
         # has a race condition when creating/moving
